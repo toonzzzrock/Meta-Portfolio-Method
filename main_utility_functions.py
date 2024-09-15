@@ -9,7 +9,7 @@ import scipy.cluster.hierarchy as hr
 '''
 FUNCTIONS FOR CREATING FEATURES
 '''
-def get_sharpe(ret, freq):
+def get_sharpe(ret, freq, smart = False):
     '''
     for e.g. if monthly selected:
         find the first date of each month present, then for each COMPLETE month, calc the cum ret
@@ -62,6 +62,8 @@ def get_sharpe(ret, freq):
         sharpe=pd.Series([ cum_ret(ret.iloc[index[i]:index[i+1]]) for i in range(len(index)-1) ])
         
         return sharpe.mean()/sharpe.std()
+
+    
 
 def cagr(ret):
     '''
@@ -119,8 +121,8 @@ def mdd(ret):
         max drawdown of period
     '''
     #notify if NaN exists:
-    if ret.isnull().values.any() or 0 in ret.values:
-        print('There exists NaN or 0 values in mdd!')
+    # if ret.isnull().values.any() or 0 in ret.values:
+    #     print('There exists NaN or 0 values in mdd!')
     #cum_returns is basically the price history
     cum_returns = (1 +ret).cumprod()
     #cum_returns.cummax gives highest price observed so far at any point
@@ -167,7 +169,7 @@ def coph_corr(port):
         first gives a numpy scalar value, then converts it to a float!
     '''
 
-    return hr.cophenet(port.clusters,Y=port.p_dist)[0].item() #check out hr's cophenet method
+    return hr.cophenet(port.clustering,Y=port.p_dist)[0].item() #check out hr's cophenet method
 
 #%%
 '''

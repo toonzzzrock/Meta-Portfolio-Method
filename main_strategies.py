@@ -258,7 +258,7 @@ for i in index_trng: #these are integer indexes where MPM strat choosing occurs
     print('Training: '+str(i))
     # fit model
     #note that loc includes last elem! make sure not to include the X you want to predict
-    reg.fit(X.loc[i-trng_period:i-1], y.loc[i-trng_period:i-1])
+    reg.fit(X.loc[i-trng_period:i-1], y.loc[i-trng_period:i-1], xgb_model=reg.get_booster())
     #make prediction on ith month
     if reg.predict(X.loc[[i]])>0: #[[]] ensures the row is a dataframe, NOT a series
         weights_MPM[i]=weights_HRP[i] #all in this line are series
@@ -306,7 +306,7 @@ comp=pd.DataFrame(columns=['Cumulative Return',
 
 #get performance metrics
 for strat in keys:
-    pr=port_ret( weights_ALL[strat] ,returns,index_trng).dropna()
+    pr=port_ret(weights_ALL[strat] ,returns,index_trng).dropna()
     #update portfolio returns
     pr_df[strat]=pr
     #update values
@@ -337,3 +337,24 @@ fig1.show()
 '''Examining this asset universe, using Correlation matrix of ALL historical returns'''
 uni_corr_stats=stats_uni_corr(returns.dropna())
 
+# 5 hour [TODO] detect overfitting in XGboost model
+# 1 hour [TODO] online learning, and updating model
+# 5 hour [TODO] more analysis on final results performance. And frequency of MPM choosing HRP/ERC 
+# 3 hour [TODO] more analysis on feature importance, and how it affects MPM choice
+# 2 hour [TODO] consider MAPE of sharpe ratio, and it spred.
+# 3 hour [TODO] use SHAP values to explain feature importance
+# 3 hour [TODO] consider using a lightgbm model, and catboost model
+# 1 day [TODO] change to backtesting framework, and add transaction costs
+# 1 day [TODO] consider using a different risk measure, like CVaR
+# 3 day [TODO] if it change to reinformencement learning, is it need to change the way to train (e.g., train (first 60%) - test (last 40%))o
+# 3 day [TODO] Use DQN to choose strategy instead also add switching cost
+# 3 day [TODO] add more strategies and more frequency of rebalancing (daily, weekly, monthly)
+# 1 day [TODO] add continuous portfolios weighting (not just 100% in one portfolio)
+# 3 day [TODO] compare to direct investment in the index itself
+
+# 21 days: project total 
+# 4 days [TODO] summarize the results in a clean code and add comments
+# 2 days [TODO] create a poster
+# 6 days [TODO] create a presentation
+# 12 days: presentation and poster total
+# 34 days: project total

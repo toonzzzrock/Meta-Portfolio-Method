@@ -87,6 +87,9 @@ index = returns.groupby([returns.index.year, returns.index.month]).head(1).index
 cov_period=252 #n.o. of days in one trading year
 index_ = [returns.index.get_loc(x) for x in index if returns.index.get_loc(x) >cov_period]
 
+
+if Path('data.pkl').exists():
+    raise Exception('data.pkl already exists. Please delete it before running this script again.')
 #save impt variables as a list, written in binary code
 with open('data.pkl','wb') as f:
     pkl.dump([cov_period, index_, returns],f)
